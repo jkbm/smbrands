@@ -1,0 +1,12 @@
+*.json
+*.pyc
+*~
+__pycache__
+virenv
+///db.sqlite3
+///static
+.DS_Store
+*.sqlite3
+users.txt
+/htmlcov
+.coverage
