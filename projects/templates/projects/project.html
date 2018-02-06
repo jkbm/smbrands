@@ -1,0 +1,12 @@
+{% extends 'projects/base.html' %}
+
+{% block content %}
+
+<h2>{{ project.title }}</h2>
+
+{% for dataset in datasets %}
+    <p>{{ dataset.filename }}</p>
+
+{% endfor %}
+
+{% endblock %}

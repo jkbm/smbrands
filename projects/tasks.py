@@ -14,3 +14,10 @@ def temp_task(search_query, number, filename, result_type):
     t.rest()
     
     print("Task executed! Horray..." + search_query)
+
+@app.task
+def stream_task(search_query, number, filename, result_type):
+    t = Twitter(search_query, number, filename, result_type)
+    t.livestream()
+    
+    print("Task executed! Horray..." + search_query)

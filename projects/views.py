@@ -1,9 +1,10 @@
 
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import datetime
 from operator import itemgetter
+from datetime import datetime
 import time
+import kombu.five
 
 from django.shortcuts import render
 from .models import Project, User, Twitter_data,  Dataset
@@ -21,7 +22,9 @@ from django.views import View
 
 
 from .data import *
-from .tasks import temp_task
+from .tasks import temp_task, stream_task
+from celery.task.control import inspect
+
 
 
 
@@ -52,6 +55,14 @@ def projects(request):
 
     return render(request, 'projects/projects.html', {'form': form, 'projects': projects})
 
+def project(request, pk):
+
+    project = Project.objects.get(pk=pk)
+
+    datasets = Dataset.objects.filter(project=project)
+
+    return render(request, 'projects/project.html', {'project': project, 'datasets': datasets})
+
 def show_results(request, data_pk):
     data = Dataset.objects.get(pk=data_pk)
     texts = []
@@ -78,7 +89,7 @@ def get_data(request):
         form = GetDataForm(request.POST) # A form bound to the POST data
         if form.is_valid():
             project = Project.objects.filter(name="temp")
-            filename = form.cleaned_data['query'] + "_" + datetime.datetime.now().strftime("%d%m%Y_%H%M")
+            filename = form.cleaned_data['query'] + "_" + datetime.now().strftime("%d%m%Y_%H%M")
             result_type = form.cleaned_data['result_type']
 
             if form.cleaned_data['number'] > 0:
@@ -92,14 +103,17 @@ def get_data(request):
             
             
             query = form.cleaned_data['query']
-            temp_task.delay(query, number, filename, result_type)
-            #twitter_stream(query, 5, 10)
-
             print(form.cleaned_data['query'])
+            if 'get_rest' in request.POST:
+                temp_task.delay(query, number, filename, result_type)
+                time.sleep(10)
+                
+            elif 'get_stream' in request.POST:
+                stream_task.delay(query, number, filename, result_type)
+            #twitter_stream(query, 5, 10)
+        return redirect('projects:search_results', data_pk=ds.pk) # Redirect after POST
+            
 
-            time.sleep(10)
-
-            return redirect('projects:search_results', data_pk=ds.pk) # Redirect after POST
     else:
         form = GetDataForm() # An unbound form
 
@@ -108,4 +122,26 @@ def get_data(request):
     })
 
 
+def task_control(request):
+
+    i = inspect()
+    # Show the items that have an ETA or are scheduled for later processing
+    scheduled = i.scheduled()
+
+    scheduled = next (iter (scheduled.values()))
+    # Show tasks that are currently active.
+    active = i.active()
+    active = next (iter (active.values()))
+
+    for t in active:
+        time_start = t['time_start']        
+        t['time_start'] = datetime.fromtimestamp(time.time() - (kombu.five.monotonic() - time_start))
+
+    # Show tasks that have been claimed by workers
+    reserved = i.reserved()
+    
+    return render(request, 'projects/tasks.html', {
+        'scheduled': scheduled,
+        'active': active, 
+        'reserved': reserved})
 

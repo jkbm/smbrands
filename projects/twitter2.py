@@ -22,6 +22,47 @@ OAUTH_TOKEN_SECRET = auth_json['OAUTH_TOKEN_SECRET']
 
 tweets = ""
 
+class listener(StreamListener):
+
+				def __init__(self, num, file):
+					self.got_num = 0
+					self.file = file
+					self.num = num
+					self.tweets_dict = []
+					self.tweets_json = {"statuses": []}
+					
+				
+				def on_data(self, data):					
+
+					try:
+						
+						if self.got_num <= self.num:
+							self.got_num += 1
+							global tweets
+							tweet = json.loads(data)
+							jsonFile = open('projects/twitter/files/' + self.file + '.json', 'w')
+							self.tweets_json["statuses"].append(tweet)
+							json.dump(self.tweets_json, jsonFile)
+							jsonFile.close()
+							#self.tweets_dict.append(tweet)
+							tex = tweet['text']
+							saveFile = open('projects/twitter/files/' + self.file + '.csv', 'a')
+							tweets = tweets + "||" + tex
+							saveFile.write(tex)
+							saveFile.write("\n")
+							saveFile.close()
+							
+							#print(tex)
+							return True
+						else:
+							return False
+					except BaseException as e:
+						print("Failed: " + str(e))
+						time.sleep(5)
+					
+					
+					
+
 class Twitter():
 
 
@@ -124,7 +165,7 @@ class Twitter():
 		return data
 
 
-	def rest (self):
+	def rest(self):
 
 		data = []
 		print("Starting...")
@@ -162,6 +203,20 @@ class Twitter():
 
 		return data
 
-		def fulltime(self):
+	def livestream(self):
+		"""Getting live stream of data on searched topic"""
+		print("Starting stream...")
 
-			r = requests.get()
+		seek = self.query
+
+		def on_error(status):
+			print(status)
+
+		auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+		auth.set_access_token(OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+		twitterStream = Stream(auth, listener(self.num, self.fn))
+		twitterStream.filter(track=[seek])
+		
+		return tweets
+
+

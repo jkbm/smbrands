@@ -1,0 +1,35 @@
+{% extends 'projects/base.html' %}
+
+{% block content %}
+
+<h2>Task monitoring center</h2>
+<h3>Tasks</h3>
+<h4>Active:</h4>
+<p>
+    {% for task in active %}
+        Hostname: {{ task.hostname }}<br>
+        Time started: {{ task.time_start }}<br>
+        Arguments: {{ task.args }}<br>
+        Priority: {{ task.delivery_info.priority }}<br>
+    {% endfor %}
+</p>
+<h4>Scheduled:</h4>
+<p>
+{% for task in scheduled %}
+    Hostname: {{ task.hostname }}<br>
+    Time started: {{ task.time_start }}<br>
+    Arguments: {{ task.args }}<br>
+    Priority: {{ task.delivery_info.priority }}<br>
+{% endfor %}
+</p>
+<h4>Reserved:</h4>
+<p>
+    {% for task in reserved %}
+        Hostname: {{ task.hostname }}<br>
+        Time started: {{ task.time_start }}<br>
+        Arguments: {{ task.args }}<br>
+        Priority: {{ task.delivery_info.priority }}<br>
+    {% endfor %}
+</p>
+
+{% endblock %}

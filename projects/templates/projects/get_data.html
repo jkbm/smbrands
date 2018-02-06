@@ -6,7 +6,8 @@
     <form method="POST">{% csrf_token %}
         {{ form.as_p }}
         
-        <button type="submit" class="save btn btn-default" name='create'>Search</button>
+        <button type="submit" class="save btn btn-default" name='get_rest'>Search</button>
+        <button type="submit" class="save btn btn-default" name='get_stream'>Get live data</button>   
 
     </form>
 </div>
