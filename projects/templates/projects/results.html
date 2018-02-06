@@ -1,0 +1,11 @@
+{% extends 'projects/base.html' %}
+
+{% block content %}
+
+{% for t in texts %}
+    <h4>{{ t.3 }} | {{ t.2 }}: </h4>
+    <p>{{ t.0 }} | {{ t.1 }}  &#9829;</p>
+
+{% endfor %}
+
+{% endblock %}
