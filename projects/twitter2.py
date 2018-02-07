@@ -8,6 +8,8 @@ from tweepy.streaming import StreamListener
 import json
 import time
 
+from .models import Dataset
+
 auth = open("projects/twitter/auth.json", "r")
 auth_json = json.load(auth)
 
@@ -44,15 +46,10 @@ class listener(StreamListener):
 							self.tweets_json["statuses"].append(tweet)
 							json.dump(self.tweets_json, jsonFile)
 							jsonFile.close()
-							#self.tweets_dict.append(tweet)
-							tex = tweet['text']
-							saveFile = open('projects/twitter/files/' + self.file + '.csv', 'a')
-							tweets = tweets + "||" + tex
-							saveFile.write(tex)
-							saveFile.write("\n")
-							saveFile.close()
-							
-							#print(tex)
+							dataset = Dataset.objects.get(filename=self.file)
+							dataset.number_of_messages = len(self.tweets_json['statuses'])
+							dataset.save()
+
 							return True
 						else:
 							return False
@@ -181,25 +178,11 @@ class Twitter():
 			data_file = open('projects/twitter/files/' + self.fn +'.json', 'w')
 			json.dump(text, data_file)
 			data_file.close()
-			print("Recieved {0} of tweets".format(len(text['statuses'])))
-			for x in range(0,int(self.realn)):
-				try:
-					tex = str(text['statuses'][x]['text']).encode('utf-8')
-					texdat = text['statuses'][x]['created_at']
-					texid = text['statuses'][x]['id_str']
-					texid = int(texid.replace("u'", "").replace("'",""))
-					uid = int(text['statuses'][x]['user']['id'])
-					uscreen = text['statuses'][x]['user']['screen_name']
-					uname = text['statuses'][x]['user']['name'].encode('utf-8')
-					uloc = text['statuses'][x]['user']['location'].encode('utf-8')
-					data.append([[tex], [texdat], [texid], [uscreen], [uname], [uloc], [uid],[uscreen]])
-					record = open('research.txt', 'w')
-					record.write(str(data))
-					record.close()
-				except Exception as e:
-					print(e)
-					data.append([['NO DATA'], ['-'], [123], ['USER NOT FOUND'], [e], ['Wasteland'], [21],['Courier']])
 
+			dataset = Dataset.objects.get(filename=self.fn)
+			dataset.number_of_messages = len(text['statuses'])
+			dataset.save()
+			print("Recieved {0} of tweets".format(len(text['statuses'])))
 
 		return data
 

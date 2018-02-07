@@ -24,6 +24,13 @@ class Dataset(models.Model):
     project = models.ForeignKey(Project, on_delete="models.CASCADE")
 
     filename = models.CharField(max_length=50, null=True, blank=True)
+    number_of_messages = models.IntegerField(null=True, blank=True)
+    saved = models.BooleanField(default=True)
+
+    def __str__(self):
+
+        return self.filename
+
 
 class User(models.Model):
     user_id = models.BigIntegerField(primary_key=True)

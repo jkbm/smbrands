@@ -49,7 +49,7 @@ def projects(request):
             project.save()
             if 'create' in request.POST:
                 messages.info(request, 'Project created.')
-                return redirect('projects:projects')
+                return redirect('projects:home')
     else:
         form = NewProjectForm()
 
@@ -59,7 +59,7 @@ def project(request, pk):
 
     project = Project.objects.get(pk=pk)
 
-    datasets = Dataset.objects.filter(project=project)
+    datasets = Dataset.objects.filter(project=project).order_by('-pk')
 
     return render(request, 'projects/project.html', {'project': project, 'datasets': datasets})
 
@@ -88,7 +88,7 @@ def get_data(request):
     if request.method == 'POST': # If the form has been submitted...
         form = GetDataForm(request.POST) # A form bound to the POST data
         if form.is_valid():
-            project = Project.objects.filter(name="temp")
+            project = Project.objects.filter(pk=form.cleaned_data['project'])
             filename = form.cleaned_data['query'] + "_" + datetime.now().strftime("%d%m%Y_%H%M")
             result_type = form.cleaned_data['result_type']
 
@@ -145,3 +145,6 @@ def task_control(request):
         'active': active, 
         'reserved': reserved})
 
+def temp(request):
+
+    return render(request, 'projects/temp.html')
