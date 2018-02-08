@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^search/$', views.get_data, name='search'),
     url(r'^tasks/$', views.task_control, name='task_control'),
     url(r'^search/results/(?P<data_pk>[\w-]+)/$', views.show_results, name='search_results'),
+    url(r'^analytics/words_(?P<dataset_pk>[\w-]+)/$$', views.analyze_data, name="analyze_words"),
     url(r'^temp/$', views.temp, name='temp')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

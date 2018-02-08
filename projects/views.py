@@ -25,6 +25,7 @@ from .data import *
 from .tasks import temp_task, stream_task
 from celery.task.control import inspect
 
+from .analytics import wordFreq
 
 
 
@@ -65,6 +66,7 @@ def project(request, pk):
 
 def show_results(request, data_pk):
     data = Dataset.objects.get(pk=data_pk)
+    project = data.project
     texts = []
     
     try:
@@ -82,7 +84,7 @@ def show_results(request, data_pk):
 
 
 
-    return render(request, 'projects/results.html',{'texts': texts})
+    return render(request, 'projects/results.html',{'texts': texts, 'project': project})
 
 def get_data(request):
     if request.method == 'POST': # If the form has been submitted...
@@ -121,6 +123,19 @@ def get_data(request):
         'form': form,
     })
 
+def analyze_data(request, dataset_pk):
+
+    wordFreq(dataset_pk)
+
+    jdata = json.load(open("projects/twitter/files/analysis_data.json",'r'))
+
+    max_data = 0
+
+    for it in jdata:
+        if jdata[it] > max_data:
+            max_data = jdata[it]
+
+    return render(request, 'projects/chart_words.html', {'jdata': jdata, 'max_data': max_data })
 
 def task_control(request):
 

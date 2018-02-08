@@ -1,10 +1,26 @@
 # -*- coding: utf-8 -*-
 import json
-def get_data(project, dataset):
-    
-    data = json.load(open('projects/twitter/files/' + dataset.filename +'.json', 'r'))
+import re
+from .models import Dataset
+def get_data(dataset=71):
 
-    return data
+    try:
+        ds = Dataset.objects.get(pk=dataset)
+        fn = ds.filename
+        data = json.load(open('projects/twitter/files/' + fn +'.json', 'r'))
+    except:
+        fn = "Falcon Heavy_07022018_1936"
+        data = json.load(open('projects/twitter/files/' + fn +'.json', 'r'))
+    
+    
+
+    tweets = []
+    print(len(data['statuses']))
+    for t in data['statuses']:
+        text = re.sub(r"[^a-zA-Z0-9]+", ' ', t['text'])
+        tweets.append(text)
+
+    return tweets
 
 def popularWords(tweets):
     string = ""
@@ -54,10 +70,15 @@ def popularWords(tweets):
         top_dict[names[n]] =  nums[n]
     print(top_dict)
     for item in top_dict:
-        print(top_dict[item])
-    with open("/home/jekabm/mysite/analysis_data.json", "w") as jsonFile:
+        print(item + ":" + str(top_dict[item]))
+    with open("projects/twitter/files/analysis_data.json", "w") as jsonFile:
             jsonFile.write(json.dumps(top_dict))
 
-def wordFreq(project):
-    tweets = get_data(project)
+def wordFreq(dataset):
+    tweets = get_data(dataset)
+    popularWords(tweets)
+
+if __name__ == '__main__':
+
+    tweets = get_data(71)
     popularWords(tweets)
