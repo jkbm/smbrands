@@ -24,6 +24,7 @@ class Dataset(models.Model):
     project = models.ForeignKey(Project, on_delete="models.CASCADE")
 
     filename = models.CharField(max_length=50, null=True, blank=True)
+    query = models.CharField(max_length=200, null=True, blank=True)
     number_of_messages = models.IntegerField(null=True, blank=True)
     saved = models.BooleanField(default=True)
 

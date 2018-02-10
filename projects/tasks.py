@@ -21,3 +21,11 @@ def stream_task(search_query, number, filename, result_type):
     t.livestream()
     
     print("Task executed! Horray..." + search_query)
+
+
+@app.task
+def premium_task(search_query, number, filename, result_type):
+    t = Twitter(search_query, number, filename, result_type)
+    t.premium()
+    
+    print("Task executed! Horray..." + search_query)    

@@ -11,3 +11,4 @@ virenv
 users.txt
 /htmlcov
 .coverage
+commands

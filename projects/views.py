@@ -22,7 +22,7 @@ from django.views import View
 
 
 from .data import *
-from .tasks import temp_task, stream_task
+from .tasks import temp_task, stream_task, premium_task
 from celery.task.control import inspect
 
 from .analytics import wordFreq
@@ -84,7 +84,7 @@ def show_results(request, data_pk):
 
 
 
-    return render(request, 'projects/results.html',{'texts': texts, 'project': project})
+    return render(request, 'projects/results.html',{'texts': texts, 'project': project, 'dataset': data})
 
 def get_data(request):
     if request.method == 'POST': # If the form has been submitted...
@@ -101,7 +101,7 @@ def get_data(request):
 
 
             created_file = open('projects/twitter/files/{0}.json'.format(filename), 'w+')
-            ds = Dataset.objects.create(project=project[0], filename=filename)
+            ds = Dataset.objects.create(project=project[0], filename=filename, query=form.cleaned_data['query'])
             
             
             query = form.cleaned_data['query']
@@ -112,6 +112,14 @@ def get_data(request):
                 
             elif 'get_stream' in request.POST:
                 stream_task.delay(query, number, filename, result_type)
+            elif 'get_full' in request.POST:
+                premium_task.delay(query, number, filename, result_type)
+                if int(form.cleaned_data['number']) > 500:
+                    time.sleep(10)
+                elif int(form.cleaned_data['number']) > 5000:
+                    time.sleep(15)
+                else:
+                    time.sleep(3)
             #twitter_stream(query, 5, 10)
         return redirect('projects:search_results', data_pk=ds.pk) # Redirect after POST
             

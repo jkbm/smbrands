@@ -8,6 +8,7 @@ from tweepy.streaming import StreamListener
 import json
 import time
 
+
 from .models import Dataset
 
 auth = open("projects/twitter/auth.json", "r")
@@ -102,8 +103,6 @@ class Twitter():
 		return token, secret
 
 	def get_oauth(self):
-
-
 		oauth = OAuth1(CONSUMER_KEY,
 					client_secret=CONSUMER_SECRET,
 					resource_owner_key=OAUTH_TOKEN,
@@ -202,4 +201,89 @@ class Twitter():
 		
 		return tweets
 
+
+	def getLotOfTweetsPremium(self):
+		result_type = self.rt
+
+		data = []
+		tries = 1
+		if self.num % 100 == 0:
+			tries = int(round(self.num / 100))
+			first_try = 100
+		else:
+			tries  = int(round(self.num / 100 + 1))
+			first_try = self.num % 100
+
+
+
+		for i in range(1, tries+1):
+			next_page=""
+			if not OAUTH_TOKEN:
+				token, secret = self.setup_oauth()
+				print("OAUTH_TOKEN: " + token)
+				print("OAUTH_TOKEN_SECRET: " + secret)
+				print("______________________________")
+			else:
+				if i == 1:
+					oauth = self.get_oauth()
+					url = "https://api.twitter.com/1.1/tweets/search/fullarchive/brands.json?query="+self.query+"&maxResults=" + str(first_try)+""
+					r = requests.get(url=url, auth=oauth)
+					rj = r.json()
+					data.append(r.json())
+					with open('TEMP.json', 'w') as outfile:
+						json.dump(r.json(), outfile)
+					#print(str(r.json())[:500])
+					print("rj['next']\n \n")
+					next_page = rj['next']
+					prms = { 'query' : self.query, 'maxResults': 100,'next': next_page}
+					params = parse.urlencode(prms)
+					print(params)
+				else:
+					oauth = self.get_oauth()
+					r = requests.get(url="https://api.twitter.com/1.1/tweets/search/fullarchive/brands.json?"+params, auth=oauth)
+					print(str(r.json())[:500])
+					print("\n \n")					
+					rj = r.json()
+					data.append(r.json())
+
+					next_page = rj['next']
+					prms['next'] = next_page
+					params = parse.urlencode(prms)
+		
+		
+		for x in range(1, len(data)):
+			self.realn += len(data[x]["results"])
+			print(self.realn)
+			if len(data[x]["results"]) > 0:
+				for y in range(0, len(data[x]["results"])):
+					data[0]['results'].append(data[x]["results"][y])
+			else:
+				self.num = len(data[0]['results'])
+
+		data = data[0]
+		return data
+
+	def premium(self):
+		data = []
+		print("Starting...")
+		self.query = self.query.replace (" ", "%20")
+
+		if not OAUTH_TOKEN:
+			token, secret = setup_oauth()
+			print("OAUTH_TOKEN: " + token)
+			print("OAUTH_TOKEN_SECRET: " + secret)
+			print("_______________________________")
+		else:
+			text = self.getLotOfTweetsPremium()
+			text['statuses'] = text.pop('results')
+			data_file = open('projects/twitter/files/' + self.fn +'.json', 'w')
+			json.dump(text, data_file)
+			data_file.close()
+
+			dataset = Dataset.objects.get(filename=self.fn)
+			dataset.number_of_messages = len(text['statuses'])
+			dataset.save()
+			print("Recieved {0} of tweets".format(len(text['statuses'])))
+
+		return data
 
