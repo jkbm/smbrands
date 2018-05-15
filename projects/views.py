@@ -9,7 +9,9 @@ import kombu.five
 from django.shortcuts import render
 from .models import Project, User, Twitter_data,  Dataset
 from .forms import *
+from .serializers import ProjectSerializer
 
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView 
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -171,3 +173,16 @@ def task_control(request):
 def temp(request):
 
     return render(request, 'projects/temp.html')
+
+
+""" API VIEWS BELOW """
+
+class ProjectsCreateReadView(ListCreateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    lookup_field = 'name'
+
+class ProjectsReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    lookup_field = 'pk'

@@ -18,12 +18,20 @@ from django.contrib import admin
 from django.contrib.auth import views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
 
 from . import views
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+
 
 urlpatterns = [
 
     url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^projects/', include('projects.urls', namespace='projects'))
+    url(r'^projects/', include('projects.urls', namespace='projects')),
+    url(r'^api/', include(router.urls,)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

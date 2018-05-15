@@ -35,14 +35,17 @@ class Dataset(models.Model):
 
 class User(models.Model):
     user_id = models.BigIntegerField(primary_key=True)
-    name = models.CharField(max_length=200)
+    screen_name = models.CharField(max_length=200, default='username')
+    name = models.CharField(max_length=200, null=True, blank=True, default = 'name')
+    statuses_count = models.IntegerField()
     following = models.IntegerField()
     followers = models.IntegerField()
-    messages = models.IntegerField()
     likes = models.IntegerField()
+    description = models.CharField(max_length=300, null=True, blank=True)
+
 
     def __str__(self):
-        return self.name + "|" + self.user_id
+        return self.screen_name + "|" + str(self.user_id)
 
 class Twitter_data(models.Model):
 
@@ -50,7 +53,13 @@ class Twitter_data(models.Model):
     likes = models.IntegerField()
     retweets = models.IntegerField()
     replies = models.IntegerField()
-    user = models.BigIntegerField()
-    date = models.DateField(null=True, blank=True)
-    dataset = models.ForeignKey(Dataset, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     
+    dataset = models.ForeignKey(Dataset, null=True, blank=True, on_delete=models.CASCADE)
+
+class Analisys_data(models.Model):
+    project = models.ForeignKey(Project, on_delete="models.CASCADE")
+    dataset = models.ForeignKey(Dataset, null=True, blank=True, on_delete=models.CASCADE)
+    date = models.DateField(null=True, blank=True)
+    json_result = models.CharField(max_length=200)
+

@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_countries',
+    'django_extensions',
+    'rest_framework',
     'main',
     'datawork',
     'projects',
+    'restfull'
 
 ]
 

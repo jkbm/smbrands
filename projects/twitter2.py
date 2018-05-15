@@ -163,7 +163,7 @@ class Twitter():
 
 	def rest(self):
 
-		data = []
+		data = ""
 		print("Starting...")
 		self.query = self.query.replace (" ", "%20")
 
@@ -182,6 +182,7 @@ class Twitter():
 			dataset.number_of_messages = len(text['statuses'])
 			dataset.save()
 			print("Recieved {0} of tweets".format(len(text['statuses'])))
+			data = text['statuses']
 
 		return data
 

@@ -7,7 +7,7 @@
 <div>
 <h3>Search results for <b>{{ dataset.query }}</b>. Found {{ dataset.number_of_messages }} messages.</h3>
 {% for t in texts %}
-    <h4>{{ t.3 }} | {{ t.2 }}: </h4>
+    <h4>{{ t.3 }} | @{{ t.2 }}: </h4>
     <p>{{ t.0 }} | {{ t.1 }}  &#9829;</p>
 
 {% endfor %}
