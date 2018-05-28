@@ -170,6 +170,9 @@ def task_control(request):
         'active': active, 
         'reserved': reserved})
 
+def analyse(request):
+
+    return render(request, 'projects/analysis.html')
 def temp(request):
 
     return render(request, 'projects/temp.html')

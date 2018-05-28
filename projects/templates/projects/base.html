@@ -24,26 +24,29 @@
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#">Brands</a>
+            <a class="navbar-brand" href="#">Brands Managements</a>
             
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'projects:home' %}">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{% url 'projects:home' %}">Додому <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'projects:search' %}">Get data</a>
+                    <a class="nav-link" href="{% url 'projects:search' %}">Отримат дані</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                    <a class="nav-link" href="{% url 'admin:index' %}">Сторінка адміністратора</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'projects:analysis' %}">Аналіз даних</a>
+                </li
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <input class="form-control mr-sm-2" type="text" placeholder="Пошук">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
                 </form>
             </div>
     </nav>
