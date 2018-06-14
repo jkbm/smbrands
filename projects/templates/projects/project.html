@@ -10,17 +10,17 @@
 </style>
 
 <h2>{{ project.name }}</h2>
-<h3>Description: </h3>
+<h3>Опис: </h3>
 <p>{{ project.description }}</p>
-<a href="{% url 'projects:search' %}"><button type="button" class="btn btn-outline-info">Add more data</button></a>
+<a href="{% url 'projects:search' %}"><button type="button" class="btn btn-outline-info">Додати даних</button></a>
 <hr>
 
-<h3>Project's datasets:</h3>
+<h3>Датасети проекту:</h3>
 <div class="datasets">
 {% for dataset in datasets %}
     <p><a href="{% url 'projects:search_results' data_pk=dataset.pk %}">{{ dataset.filename }}</a><br>
-        Number of messages: {{ dataset.number_of_messages }}<br>
-        <a href="{% url 'projects:analyze_words' dataset_pk=dataset.pk %}"><button type="button" class="btn btn-primary">Analyze words</button></a>
+        Кількість повідомлень: {{ dataset.number_of_messages }}<br>
+        <a href="{% url 'projects:analyze_words' dataset_pk=dataset.pk %}"><button type="button" class="btn btn-primary">Аналіз</button></a>
 
     </p>
 {% endfor %}

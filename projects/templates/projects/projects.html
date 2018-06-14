@@ -4,7 +4,7 @@
 
 
 <div class="projects">
-    <h2>Projects:</h2>
+    <h2>Оберіть проект:</h2>
 {% for project in projects %}
 
     <a href="{% url 'projects:project_home' pk=project.pk %}"><h2>{{ project.name }}</h2></a>
@@ -12,11 +12,11 @@
 </div>
 <hr>
 <div class="form">
-    <h1>Create new project</h1>
+    <h1>Створити новий проект</h1>
     <form method="POST" class="tournament-form">{% csrf_token %}
         {{ form.as_p }}
         
-        <button type="submit" class="save btn btn-default" name='create'>Add New Project</button>
+        <button type="submit" class="save btn btn-default" name='create'>Створити</button>
 
     </form>
 </div>
