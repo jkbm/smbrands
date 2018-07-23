@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from Brands.celery import app
 from .twitter2 import Twitter
 from .misc import temp, add_users
-from .models import User
+from .models import User, Dataset
  
 @app.task
 def temp_task(search_query, number, filename, result_type):
@@ -20,7 +20,9 @@ def temp_task(search_query, number, filename, result_type):
 def stream_task(search_query, number, filename, result_type):
     t = Twitter(search_query, number, filename, result_type)
     t.livestream()
-    
+    dataset = Dataset.objects.get(filename=filename)
+    dataset.life=False
+    dataset.save()
     print("Task executed! Horray..." + search_query)
 
 

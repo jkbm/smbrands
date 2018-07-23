@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="form">
-    <h1>Enter search parameters:</h1>
+    <h1>Введіть параметри пошуку:</h1>
     <form method="POST">{% csrf_token %}
         {{ form.as_p }}
         

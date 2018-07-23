@@ -25,7 +25,7 @@ from django.views import View
 
 from .data import *
 from .tasks import temp_task, stream_task, premium_task
-from celery.task.control import inspect
+from celery.task.control import inspect, revoke
 
 from .analytics import wordFreq
 
@@ -76,7 +76,7 @@ def show_results(request, data_pk):
         statuses = dataj['statuses']
 
         for s in statuses:
-            dset = [s['text'],s['favorite_count'], s['user']['screen_name'], s['created_at']]
+            dset = [s['text'],s['favorite_count'], s['user']['screen_name'], s['created_at'], s['text'].split('://')[-1]]
             texts.append(dset)
         
         texts = sorted(texts, key=itemgetter(1), reverse=True)
@@ -164,7 +164,24 @@ def task_control(request):
 
     # Show tasks that have been claimed by workers
     reserved = i.reserved()
-    
+
+    task_id = 0
+    for i, e in request.POST.items():        
+        if 'stop' in i:
+            print(i, e)
+            task_id = i
+
+    if task_id in request.POST:
+        task_id = task_id.split('stop')[-1]       
+        print("Clossing task {0}".format(task_id))
+        revoke(task_id, terminate=True)
+        messages.info(request, 'Task stopped.')
+        time.sleep(5)
+        return render(request, 'projects/tasks.html', {
+                    'scheduled': scheduled,
+                    'active': active, 
+                    'reserved': reserved})
+
     return render(request, 'projects/tasks.html', {
         'scheduled': scheduled,
         'active': active, 
@@ -173,6 +190,7 @@ def task_control(request):
 def analyse(request):
 
     return render(request, 'projects/analysis.html')
+
 def temp(request):
 
     return render(request, 'projects/temp.html')

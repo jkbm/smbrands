@@ -15,10 +15,12 @@
 <a href="{% url 'projects:search' %}"><button type="button" class="btn btn-outline-info">Додати даних</button></a>
 <hr>
 
+<p><span style="width:10px; display:inline-block; height:10px; background-color:#45f442; border-radius:3px; padding:3px"></span> - дані збираються в "прямому ефірі"</p>
 <h3>Датасети проекту:</h3>
+
 <div class="datasets">
 {% for dataset in datasets %}
-    <p><a href="{% url 'projects:search_results' data_pk=dataset.pk %}">{{ dataset.filename }}</a><br>
+    <p><a style="{% if dataset.life == True %}background-color:#45f442{% endif %}; border-radius:3px; padding:3px" href="{% url 'projects:search_results' data_pk=dataset.pk %}">{{ dataset.filename }}</a><br>
         Кількість повідомлень: {{ dataset.number_of_messages }}<br>
         <a href="{% url 'projects:analyze_words' dataset_pk=dataset.pk %}"><button type="button" class="btn btn-primary">Аналіз</button></a>
 
@@ -26,5 +28,7 @@
 {% endfor %}
 </div>
 
-
+<style>
+    
+</style>
 {% endblock %}

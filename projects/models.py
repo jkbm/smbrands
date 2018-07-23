@@ -27,6 +27,7 @@ class Dataset(models.Model):
     query = models.CharField(max_length=200, null=True, blank=True)
     number_of_messages = models.IntegerField(null=True, blank=True)
     saved = models.BooleanField(default=True)
+    life = models.BooleanField(default=False)
 
     def __str__(self):
 

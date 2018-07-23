@@ -11,6 +11,9 @@
         Time started: {{ task.time_start }}<br>
         Arguments: {{ task.args }}<br>
         Priority: {{ task.delivery_info.priority }}<br>
+        <form method="POST">{% csrf_token %}            
+            <button type="submit" class="save btn btn-danger" name="stop{{ task.id }}">Stop</button>
+        </form>
     {% endfor %}
 </p>
 <h4>Scheduled:</h4>

@@ -8,8 +8,13 @@
 <h3>Search results for <b>{{ dataset.query }}</b>. Found {{ dataset.number_of_messages }} messages.</h3>
 {% for t in texts %}
     <h4>{{ t.3 }} | @{{ t.2 }}: </h4>
-    <p>{{ t.0 }} | {{ t.1 }}  &#9829;</p>
+    <a href="https://{{ t.4 }}"><p>{{ t.0 }} | {{ t.1 }}  &#9829;</p></a>
 
 {% endfor %}
 </div>
+<script type="text/javascript">
+    setInterval(function() {
+                  window.location.reload();
+                }, 60000); 
+</script>
 {% endblock %}

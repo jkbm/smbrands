@@ -27,10 +27,11 @@ tweets = ""
 
 class listener(StreamListener):
 
-				def __init__(self, num, file):
+				def __init__(self, num, file, live=False):
 					self.got_num = 0
 					self.file = file
 					self.num = num
+					self.live = live
 					self.tweets_dict = []
 					self.tweets_json = {"statuses": []}
 					
@@ -48,6 +49,7 @@ class listener(StreamListener):
 							json.dump(self.tweets_json, jsonFile)
 							jsonFile.close()
 							dataset = Dataset.objects.get(filename=self.file)
+							dataset.life = self.live
 							dataset.number_of_messages = len(self.tweets_json['statuses'])
 							dataset.save()
 
@@ -197,7 +199,7 @@ class Twitter():
 
 		auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 		auth.set_access_token(OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-		twitterStream = Stream(auth, listener(self.num, self.fn))
+		twitterStream = Stream(auth, listener(self.num, self.fn, True))
 		twitterStream.filter(track=[seek])
 		
 		return tweets
