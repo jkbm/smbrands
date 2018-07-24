@@ -5,6 +5,7 @@ from operator import itemgetter
 from datetime import datetime
 import time
 import kombu.five
+import os 
 
 from django.shortcuts import render
 from .models import Project, User, Twitter_data,  Dataset
@@ -72,7 +73,8 @@ def show_results(request, data_pk):
     texts = []
     
     try:
-        dataj = json.load(open('projects/twitter/files/{0}.json'.format(data.filename), 'r'))
+        cwd = os.getcwd()
+        dataj = json.load(open(cwd + '/projects/twitter/files/{0}.json'.format(data.filename), 'r'))
         statuses = dataj['statuses']
 
         for s in statuses:
@@ -101,8 +103,8 @@ def get_data(request):
             else:
                 number = 150
 
-
-            created_file = open('projects/twitter/files/{0}.json'.format(filename), 'w+')
+            cwd = os.getcwd()
+            created_file = open(cwd + '/projects/twitter/files/{0}.json'.format(filename), 'w+')
             ds = Dataset.objects.create(project=project[0], filename=filename, query=form.cleaned_data['query'])
             
             
@@ -136,8 +138,8 @@ def get_data(request):
 def analyze_data(request, dataset_pk):
 
     wordFreq(dataset_pk)
-
-    jdata = json.load(open("projects/twitter/files/analysis_data.json",'r'))
+    cwd = os.getcwd()
+    jdata = json.load(open(cwd + "/projects/twitter/files/analysis_data.json",'r'))
 
     max_data = 0
 

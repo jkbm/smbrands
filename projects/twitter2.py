@@ -7,6 +7,7 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import json
 import time
+import os
 
 
 from .models import Dataset
@@ -38,16 +39,17 @@ class listener(StreamListener):
 				
 				def on_data(self, data):					
 
-					try:
-						
+					try:						
 						if self.got_num <= self.num:
 							self.got_num += 1
 							global tweets
 							tweet = json.loads(data)
-							jsonFile = open('projects/twitter/files/' + self.file + '.json', 'w')
-							self.tweets_json["statuses"].append(tweet)
-							json.dump(self.tweets_json, jsonFile)
-							jsonFile.close()
+							print("Saving file...")
+							with open(os.getcwd() + '/projects/twitter/files/' + self.file + '.json', 'w+') as jsonFile:
+								self.tweets_json["statuses"].append(tweet)
+								json.dump(self.tweets_json, jsonFile)
+								jsonFile.close()
+							print("Saving dataset...")
 							dataset = Dataset.objects.get(filename=self.file)
 							dataset.life = self.live
 							dataset.number_of_messages = len(self.tweets_json['statuses'])
@@ -73,6 +75,7 @@ class Twitter():
 		self.fn = filename
 		self.rt = result_type
 		self.realn = 0
+		self.path = os.getcwd() + '/projects/twitter/files/'
 
 	def setup_oauth(self):
 
@@ -176,9 +179,10 @@ class Twitter():
 			print("_______________________________")
 		else:
 			text = self.getLotOfTweets()
-			data_file = open('projects/twitter/files/' + self.fn +'.json', 'w')
-			json.dump(text, data_file)
-			data_file.close()
+			cwd = os.getcwd()
+			with open(self.path + self.fn +'.json', 'w') as data_file:
+				json.dump(text, data_file)
+				data_file.close()
 
 			dataset = Dataset.objects.get(filename=self.fn)
 			dataset.number_of_messages = len(text['statuses'])
@@ -279,7 +283,7 @@ class Twitter():
 		else:
 			text = self.getLotOfTweetsPremium()
 			text['statuses'] = text.pop('results')
-			data_file = open('projects/twitter/files/' + self.fn +'.json', 'w')
+			data_file = open(self.path + self.fn +'.json', 'w')
 			json.dump(text, data_file)
 			data_file.close()
 
