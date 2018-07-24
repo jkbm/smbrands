@@ -1,0 +1,15 @@
+body{
+    
+}
+.user{
+    padding-right: 5px;
+}
+.form{
+    width: 40%;
+    padding: 20px;
+    overflow: hidden;
+}
+.form input {
+    float: right;
+    clear: both;
+  }

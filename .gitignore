@@ -12,3 +12,4 @@ users.txt
 /htmlcov
 .coverage
 commands
+credentials

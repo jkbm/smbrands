@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^projects/(?P<pk>[0-9a-f-]+)$', views.project, name='project_home'),
     url(r'^search/$', views.get_data, name='search'),
     url(r'^analysis/$', views.analyse, name='analysis'),
+    url(r'^info/$', views.info, name='info'),
     url(r'^tasks/$', views.task_control, name='task_control'),
     url(r'^search/results/(?P<data_pk>[\w-]+)/$', views.show_results, name='search_results'),
     url(r'^analytics/words_(?P<dataset_pk>[\w-]+)/$$', views.analyze_data, name="analyze_words"),

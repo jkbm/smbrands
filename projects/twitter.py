@@ -127,7 +127,7 @@ class Twitter():
 			print("_______________________________")
 		else:
 			text = getLotOfTweets(search, num)
-			data_file = open( 'projects/twitter/files/' + file_name +'.json', 'w')
+			data_file = open( 'projects/twitter/static/' + file_name +'.json', 'w')
 			json.dump(text, data_file)
 			data_file.close()
 			for x in range(0,int(num)):

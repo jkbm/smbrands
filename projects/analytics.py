@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 import json
 import re
+import os
 from .models import Dataset
 def get_data(dataset=71):
-
+    cwd = os.getcwd()
     try:
         ds = Dataset.objects.get(pk=dataset)
         fn = ds.filename
-        data = json.load(open('projects/twitter/files/' + fn +'.json', 'r'))
+        data = json.load(cwd+open('/projects/twitter/static/' + fn +'.json', 'r'))
     except:
         fn = "Falcon Heavy_07022018_1936"
-        data = json.load(open('projects/twitter/files/' + fn +'.json', 'r'))
+        data = json.load(cwd+open('/projects/twitter/static/' + fn +'.json', 'r'))
     
     
 
@@ -23,6 +24,7 @@ def get_data(dataset=71):
     return tweets
 
 def popularWords(tweets):
+    cwd = os.getcwd()
     string = ""
     for x in tweets:
         string += str(x)
@@ -71,7 +73,7 @@ def popularWords(tweets):
     print(top_dict)
     for item in top_dict:
         print(item + ":" + str(top_dict[item]))
-    with open("projects/twitter/files/analysis_data.json", "w") as jsonFile:
+    with open(cwd+ "/projects/twitter/static/analysis_data.json", "w") as jsonFile:
             jsonFile.write(json.dumps(top_dict))
 
 def wordFreq(dataset):

@@ -45,7 +45,7 @@ class listener(StreamListener):
 							global tweets
 							tweet = json.loads(data)
 							print("Saving file...")
-							with open(os.getcwd() + '/projects/twitter/files/' + self.file + '.json', 'w+') as jsonFile:
+							with open(os.getcwd() + '/projects/twitter/static/' + self.file + '.json', 'w+') as jsonFile:
 								self.tweets_json["statuses"].append(tweet)
 								json.dump(self.tweets_json, jsonFile)
 								jsonFile.close()
@@ -75,7 +75,7 @@ class Twitter():
 		self.fn = filename
 		self.rt = result_type
 		self.realn = 0
-		self.path = os.getcwd() + '/projects/twitter/files/'
+		self.path = os.getcwd() + '/projects/twitter/static/'
 
 	def setup_oauth(self):
 

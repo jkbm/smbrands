@@ -19,7 +19,7 @@ from django.contrib.auth import views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-
+from django.contrib.auth import views as auth_views
 from . import views
 
 router = routers.DefaultRouter()
@@ -33,5 +33,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^projects/', include('projects.urls', namespace='projects')),
     url(r'^api/', include(router.urls,)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
 ]
+

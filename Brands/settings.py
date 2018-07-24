@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'Brands.urls'
@@ -86,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'brands',
         'USER': 'brandsadmin',
-        'PASSWORD': '12345',
+        'PASSWORD': os.environ.get('BRANDS_DB_PASSWORDS', '12345'),
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -140,6 +141,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -151,3 +153,7 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/'
 
 PASSWORD = "213brands"
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

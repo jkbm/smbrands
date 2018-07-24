@@ -42,6 +42,15 @@ def index(request):
 
     return render(request, 'projects/index.html')
 
+def info(request):
+    """
+    Info page
+    """
+
+
+
+    return render(request, 'projects/info.html')
+
 def projects(request):
 
     projects = Project.objects.all()
@@ -74,7 +83,7 @@ def show_results(request, data_pk):
     
     try:
         cwd = os.getcwd()
-        dataj = json.load(open(cwd + '/projects/twitter/files/{0}.json'.format(data.filename), 'r'))
+        dataj = json.load(open(cwd + '/projects/twitter/static/{0}.json'.format(data.filename), 'r'))
         statuses = dataj['statuses']
 
         for s in statuses:
@@ -104,7 +113,7 @@ def get_data(request):
                 number = 150
 
             cwd = os.getcwd()
-            created_file = open(cwd + '/projects/twitter/files/{0}.json'.format(filename), 'w+')
+            created_file = open(cwd + '/projects/twitter/static/{0}.json'.format(filename), 'w+')
             ds = Dataset.objects.create(project=project[0], filename=filename, query=form.cleaned_data['query'])
             
             
@@ -139,7 +148,7 @@ def analyze_data(request, dataset_pk):
 
     wordFreq(dataset_pk)
     cwd = os.getcwd()
-    jdata = json.load(open(cwd + "/projects/twitter/files/analysis_data.json",'r'))
+    jdata = json.load(open(cwd + "/projects/twitter/static/analysis_data.json",'r'))
 
     max_data = 0
 

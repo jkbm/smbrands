@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!doctype html>
 <html>
     <head>
@@ -17,6 +17,7 @@
         <link href="//fonts.googleapis.com/css?family=Abril+Fatface&subset=latin,latin-ext" rel="stylesheet" type="text/css">
         <link href="//fonts.googleapis.com/css?family=Merriweather&subset=latin,latin-ext" rel="stylesheet" type="text/css">
         <!-- Losal stylesheets -->
+        <link rel="stylesheet" type="text/css" href="{% static 'projects/css/base.css' %}">
     </head>
 <body>
     <div>
@@ -28,24 +29,37 @@
             
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'projects:home' %}">Додому <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'projects:search' %}">Отримат дані</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admin:index' %}">Сторінка адміністратора</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'projects:analysis' %}">Аналіз даних</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'projects:task_control' %}">Поточні задачі</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'projects:home' %}">Додому <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projects:search' %}">Отримат дані</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">Сторінка адміністратора</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projects:analysis' %}">Аналіз даних</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projects:task_control' %}">Поточні задачі</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="{% url 'projects:info' %}">About</a>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li class="nav-item">
+                                {% if user.is_authenticated %}
+                                    {{ user.username }}|
+                                    <a href="{% url 'logout' %}" class="nav-link">logout</a>
+                                {% else %}
+                                    <a href="{% url 'login' %}" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                                {% endif %}
+                        </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="Пошук">
