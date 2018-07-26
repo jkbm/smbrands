@@ -13,3 +13,4 @@ users.txt
 .coverage
 commands
 credentials
+.static
